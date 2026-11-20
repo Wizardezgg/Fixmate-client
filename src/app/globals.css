@@ -1,26 +1,67 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: #00685f;
+  --color-primary-container: #008378;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #f4fffc;
+  --color-primary-fixed: #89f5e7;
+  --color-primary-fixed-dim: #6bd8cb;
+  --color-secondary: #855300;
+  --color-secondary-container: #fea619;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #684000;
+  --color-surface: var(--fm-surface);
+  --color-surface-container-lowest: var(--fm-surface-lowest);
+  --color-surface-container-low: var(--fm-surface-low);
+  --color-surface-container: var(--fm-surface-container);
+  --color-surface-container-high: var(--fm-surface-high);
+  --color-surface-container-highest: var(--fm-surface-highest);
+  --color-on-surface: var(--fm-on-surface);
+  --color-on-surface-variant: var(--fm-on-surface-variant);
+  --color-outline: var(--fm-outline);
+  --color-outline-variant: var(--fm-outline-variant);
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --fm-surface: #faf8ff;
+  --fm-surface-lowest: #ffffff;
+  --fm-surface-low: #f2f3ff;
+  --fm-surface-container: #eaedff;
+  --fm-surface-high: #e2e7ff;
+  --fm-surface-highest: #dae2fd;
+  --fm-on-surface: #131b2e;
+  --fm-on-surface-variant: #3d4947;
+  --fm-outline: #6d7a77;
+  --fm-outline-variant: #bcc9c6;
+}
+
+.dark {
+  --fm-surface: #0b1120;
+  --fm-surface-lowest: #111827;
+  --fm-surface-low: #172033;
+  --fm-surface-container: #1e293b;
+  --fm-surface-high: #263449;
+  --fm-surface-highest: #334155;
+  --fm-on-surface: #f1f5f9;
+  --fm-on-surface-variant: #94a3b8;
+  --fm-outline: #64748b;
+  --fm-outline-variant: #334155;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--fm-surface);
+  color: var(--fm-on-surface);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 }
