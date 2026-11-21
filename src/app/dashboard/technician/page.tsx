@@ -15,6 +15,7 @@ import {
   ArrowRight,
   CheckCircle2,
   ClipboardList,
+  DollarSign,
   PlusCircle,
   Wrench,
 } from "lucide-react";
@@ -66,7 +67,19 @@ export default function TechnicianOverviewPage() {
     const pendingRequests = bookings.filter(
       (b) => b.status === "requested"
     ).length;
-    return { totalServices, approvedServices, pendingRequests };
+    const totalEarnings = bookings
+      .filter((b) => b.paymentStatus === "paid")
+      .reduce((sum, b) => sum + (Number(b.finalAmount) || 0), 0);
+    const pendingPayout = bookings
+      .filter((b) => b.status === "completed" && b.paymentStatus === "unpaid")
+      .reduce((sum, b) => sum + (Number(b.finalAmount) || 0), 0);
+    return {
+      totalServices,
+      approvedServices,
+      pendingRequests,
+      totalEarnings,
+      pendingPayout,
+    };
   }, [services, bookings]);
 
   const chartData = useMemo(() => {
@@ -106,7 +119,7 @@ export default function TechnicianOverviewPage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatsCard
             label="Total Services"
             value={loading ? "—" : stats.totalServices}
@@ -125,6 +138,16 @@ export default function TechnicianOverviewPage() {
             subtext="Awaiting your acceptance"
             icon={<ClipboardList className="w-5 h-5" />}
             accent="secondary"
+          />
+          <StatsCard
+            label="Total Revenue"
+            value={loading ? "—" : `$${stats.totalEarnings.toFixed(2)}`}
+            subtext={
+              stats.pendingPayout > 0
+                ? `$${stats.pendingPayout.toFixed(2)} awaiting customer payment`
+                : "Settled from paid jobs"
+            }
+            icon={<DollarSign className="w-5 h-5" />}
           />
         </div>
 

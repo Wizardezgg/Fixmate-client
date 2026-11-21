@@ -94,8 +94,8 @@ export default function ServiceDetailsPage() {
       toast.error("Please fill in phone, address, and preferred date.");
       return;
     }
-    if (problemDescription.trim().length < 20) {
-      toast.error("Problem description must be at least 20 characters.");
+    if (!problemDescription.trim()) {
+      toast.error("Please describe the problem with your device.");
       return;
     }
 
@@ -541,24 +541,19 @@ export default function ServiceDetailsPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <div className="flex items-center justify-between">
-                      <label
-                        htmlFor="req-problem"
-                        className="text-xs font-semibold text-on-surface"
-                      >
-                        Problem Description
-                      </label>
-                      <span className="text-[11px] text-on-surface-variant">
-                        {problemDescription.trim().length}/20 min
-                      </span>
-                    </div>
+                    <label
+                      htmlFor="req-problem"
+                      className="text-xs font-semibold text-on-surface block"
+                    >
+                      Problem Description
+                    </label>
                     <textarea
                       id="req-problem"
                       rows={3}
                       required
                       value={problemDescription}
                       onChange={(e) => setProblemDescription(e.target.value)}
-                      placeholder="Describe the issue with your device (minimum 20 characters)..."
+                      placeholder="Describe the issue with your device..."
                       className="w-full p-3 rounded-lg bg-surface-container-low border border-outline-variant/50 text-sm text-on-surface focus:outline-none focus:border-primary resize-none"
                     />
                   </div>
