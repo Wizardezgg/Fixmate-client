@@ -36,6 +36,13 @@ export function Navbar() {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [navSearch, setNavSearch] = useState("");
+
+  const handleNavSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = navSearch.trim();
+    router.push(q ? `/services?search=${encodeURIComponent(q)}` : "/services");
+  };
 
   const user = session?.user as
     | { name?: string; email?: string; image?: string; role?: UserRole }
@@ -81,17 +88,41 @@ export function Navbar() {
                 </Link>
               );
             })}
+            {!isPending && user && (
+              <Link
+                href={`/dashboard/${userRole}`}
+                className={`text-sm font-medium transition-colors ${
+                  pathname.startsWith("/dashboard")
+                    ? "text-primary font-semibold"
+                    : "text-on-surface-variant hover:text-on-surface"
+                }`}
+              >
+                Dashboard
+              </Link>
+            )}
           </nav>
         </div>
 
         <div className="flex items-center gap-2.5">
-          <Link
-            href="/services"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-on-surface-variant hover:text-on-surface bg-surface-container-low hover:bg-surface-container px-3 py-2 rounded-lg transition-colors"
+          <form
+            onSubmit={handleNavSearch}
+            className="hidden sm:flex items-center gap-1.5 bg-surface-container-low focus-within:bg-surface-container-lowest border border-outline-variant/40 focus-within:border-primary px-3 py-1.5 rounded-lg transition-colors"
           >
-            <Search className="w-3.5 h-3.5" />
-            <span>Find a service</span>
-          </Link>
+            <button
+              type="submit"
+              aria-label="Search services"
+              className="text-on-surface-variant hover:text-primary cursor-pointer"
+            >
+              <Search className="w-3.5 h-3.5" />
+            </button>
+            <input
+              type="text"
+              value={navSearch}
+              onChange={(e) => setNavSearch(e.target.value)}
+              placeholder="Find a service..."
+              className="w-32 md:w-44 bg-transparent text-xs text-on-surface placeholder:text-on-surface-variant outline-none"
+            />
+          </form>
 
           <button
             type="button"
