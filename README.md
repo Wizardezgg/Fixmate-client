@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FixMate — Smart Device & Home Appliance Repair Platform
 
-## Getting Started
+**FixMate** is a full-stack, role-based on-demand repair service booking platform where verified technicians list repair services, customers request repairs and track every stage live, and payments are processed securely via Stripe **only after** the repair is completed.
 
-First, run the development server:
+## Live URL
+- **Live Site:** `<Add your deployed Vercel URL here>`
+- **API Server:** `<Add your deployed Express Server URL here>`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Admin & Test Account Credentials
+- **Admin:** `admin@fixmate.com` / `Admin123!`
+- **Technician:** `arafat@fixmate.com` / `Arafat123!` (also `easin@fixmate.com` / `Easin123!`)
+- **Customer:** `sumon@fixmate.com` / `Sumon123!` (also `rifat@fixmate.com` / `Rifat123!`)
+
+## Key Features
+- **Role-Based Authentication & Access Control:** BetterAuth (MongoDB adapter) with `customer`, `technician`, and `admin` roles, plus JWT bridge for Express API authorization.
+- **Server-Side Search, Filter, Sort & Pagination:** MongoDB-powered filtering by keyword, category, service mode (`Home Visit` / `Shop Drop-off`), price sorting, and pagination synced with URL query parameters.
+- **Job Status Pipeline & Timeline Tracker:** Server-enforced transitions (`requested -> accepted | rejected | cancelled`, `accepted -> in-progress`, `in-progress -> completed`) with a 5-step visual tracker (`Requested -> Accepted -> In Progress -> Completed -> Paid`).
+- **Pay-After-Service Stripe Checkout:** Customers pay only after a job is marked `completed`, with idempotent payment verification, Stripe webhook support, PDF invoice download, and post-payment ratings & reviews.
+- **ImgBB Image Uploads:** Direct image upload for technician service banners and user profile avatars.
+- **Role Dashboards & Analytics:** Dedicated dashboards for Customers, Technicians, and Admins with Recharts visualizations and dark/light theme support.
+
+## Tech Stack & NPM Packages
+- **Framework:** `next`, `react`, `react-dom`, `typescript`, `tailwindcss`
+- **Authentication:** `better-auth`, `mongodb`, `jsonwebtoken`
+- **UI & Charts:** `lucide-react`, `sonner`, `recharts`, `jspdf`, `clsx`, `tailwind-merge`
+
+## Environment Variables (`.env.local`)
+```env
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_IMGBB_API_KEY=your_imgbb_api_key
+
+MONGODB_URI=your_mongodb_connection_string
+MONGODB_DB_NAME=fixmate
+
+BETTER_AUTH_SECRET=your_better_auth_secret
+BETTER_AUTH_URL=http://localhost:3000
+
+JWT_SECRET=your_shared_jwt_secret
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Running Locally
+```bash
+npm install
+npm run dev
+```
