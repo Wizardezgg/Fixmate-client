@@ -7,13 +7,33 @@ const dbName = process.env.MONGODB_DB_NAME || "fixmate";
 
 declare global {
   var _betterAuthMongoClient: MongoClient | undefined;
+  var _betterAuthMongoConnectPromise: Promise<MongoClient> | undefined;
+}
+
+export function getAuthMongoClient(): MongoClient {
+  if (!global._betterAuthMongoClient) {
+    global._betterAuthMongoClient = new MongoClient(uri, {
+      serverSelectionTimeoutMS: 10000,
+      maxPoolSize: 10,
+    });
+  }
+  return global._betterAuthMongoClient;
+}
+
+export async function ensureAuthDbConnected(): Promise<void> {
+  const client = getAuthMongoClient();
+  if (!global._betterAuthMongoConnectPromise) {
+    global._betterAuthMongoConnectPromise = client.connect().catch((err) => {
+      global._betterAuthMongoClient = undefined;
+      global._betterAuthMongoConnectPromise = undefined;
+      throw err;
+    });
+  }
+  await global._betterAuthMongoConnectPromise;
 }
 
 function getSyncDb(): Db {
-  if (!global._betterAuthMongoClient) {
-    global._betterAuthMongoClient = new MongoClient(uri);
-  }
-  return global._betterAuthMongoClient.db(dbName);
+  return getAuthMongoClient().db(dbName);
 }
 
 const trustedOrigins = Array.from(
@@ -33,9 +53,14 @@ const googleEnabled = Boolean(
 );
 
 export const auth = betterAuth({
-  database: mongodbAdapter(getSyncDb()),
+  database: mongodbAdapter(getSyncDb(), {
+    client: getAuthMongoClient(),
+  }),
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  baseURL:
+    process.env.BETTER_AUTH_URL ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    "http://localhost:3000",
   trustedOrigins,
   emailAndPassword: {
     enabled: true,

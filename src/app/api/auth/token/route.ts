@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import jwt from "jsonwebtoken";
-import { auth } from "@/lib/auth";
+import { auth, ensureAuthDbConnected } from "@/lib/auth";
 
 export async function GET() {
   try {
+    await ensureAuthDbConnected();
     const session = await auth.api.getSession({
       headers: await headers(),
     });
